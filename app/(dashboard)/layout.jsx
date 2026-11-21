@@ -17,8 +17,16 @@ const NAV = [
 
 export default async function DashboardLayout({ children }) {
   const auth = await getCurrentUserRole();
-  if (auth && auth.role === 'agent') {
+  if (!auth) {
+    redirect('/login');
+  }
+
+  if (auth.role === 'agent') {
     redirect('/portal');
+  }
+
+  if (auth.role === 'guest') {
+    redirect('/');
   }
 
   return (

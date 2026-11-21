@@ -53,8 +53,17 @@ export default async function Home() {
           <>
             <p style={{ color: '#f87171', marginBottom: 24 }}>
               Your account is not registered as a Director or Sales Agent.
-              Please contact a Director to add you to the system.
+              Please contact an existing Director to add you to the system.
             </p>
+            <form action="/auth/sign-out" method="POST">
+              <button type="submit" style={{
+                padding: '8px 20px', borderRadius: 6, border: '1px solid #475569',
+                background: 'transparent', color: '#94a3b8', fontSize: 14,
+                cursor: 'pointer'
+              }}>
+                Sign Out
+              </button>
+            </form>
           </>
         )}
       </div>
