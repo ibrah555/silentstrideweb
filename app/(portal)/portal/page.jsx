@@ -103,6 +103,23 @@ export default async function AgentPortal({ searchParams }) {
               </div>
             </div>
             
+            {agent && (
+              <Link
+                href={`/contract/${agent.id}`}
+                className="btn"
+                style={{
+                  fontSize: 12,
+                  padding: '6px 12px',
+                  background: agent.agreement_signed_at ? 'rgba(255,255,255,0.1)' : 'var(--gold)',
+                  color: agent.agreement_signed_at ? '#fff' : 'var(--navy)',
+                  fontWeight: 600,
+                  textDecoration: 'none'
+                }}
+              >
+                📄 {agent.agreement_signed_at ? 'View My Contract' : '✍ Sign Contract'}
+              </Link>
+            )}
+
             {isDirectorPreview && (
               <Link href="/dashboard" className="btn gold" style={{ fontSize: 12, padding: '6px 12px' }}>
                 Command Center ➔
@@ -144,6 +161,36 @@ export default async function AgentPortal({ searchParams }) {
             fontSize: 14
           }}>
             ⚠ {errorMsg}
+          </div>
+        )}
+
+        {agent && !agent.agreement_signed_at && (
+          <div style={{
+            background: '#FEF3C7',
+            color: '#92400E',
+            border: '1px solid #FDE68A',
+            borderRadius: 10,
+            padding: '14px 18px',
+            marginBottom: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 12
+          }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14 }}>⚠️ Sales Agency Agreement Pending Signature</div>
+              <div style={{ fontSize: 13, marginTop: 2 }}>
+                Please review and electronically sign your official agency contract and terms of commission ({commissionRatePct}%).
+              </div>
+            </div>
+            <Link
+              href={`/contract/${agent.id}`}
+              className="btn gold"
+              style={{ padding: '8px 16px', fontSize: 13, textDecoration: 'none' }}
+            >
+              Review & Sign Contract ➔
+            </Link>
           </div>
         )}
 

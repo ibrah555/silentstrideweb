@@ -193,7 +193,24 @@ export default async function AgentsPage({ searchParams }) {
                       </span>
                     </td>
                     <td className="r">
-                      <div style={{ display: 'inline-flex', gap: 6 }}>
+                      <div style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                        <a
+                          href={`/contract/${a.id}`}
+                          className="btn"
+                          title="View, sign, or print official agency agreement"
+                          style={{
+                            padding: '3px 8px',
+                            fontSize: 11,
+                            textDecoration: 'none',
+                            background: a.agreement_signed_at ? '#DCFCE7' : '#EFF6FF',
+                            color: a.agreement_signed_at ? '#15803D' : '#1D4ED8',
+                            fontWeight: 500,
+                            border: '1px solid',
+                            borderColor: a.agreement_signed_at ? '#BBF7D0' : '#BFDBFE'
+                          }}
+                        >
+                          📄 {a.agreement_signed_at ? 'Contract (Signed)' : 'Contract'}
+                        </a>
                         <a href={`/agents?edit=${a.id}`} className="btn" style={{ padding: '3px 8px', fontSize: 11, textDecoration: 'none', background: '#ECEAE4', color: 'var(--text)' }}>
                           Edit
                         </a>

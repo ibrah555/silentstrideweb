@@ -31,7 +31,7 @@ export async function GET() {
     const admin = createAdminClient(supabaseUrl, serviceKey);
 
     const { data: owners, error: ownersErr } = await admin.from('owners').select('id, full_name, email, role');
-    const { data: agents, error: agentsErr } = await admin.from('agents').select('id, full_name, email');
+    const { data: agents, error: agentsErr } = await admin.from('agents').select('*').limit(1);
     const { data: entities, error: entitiesErr } = await admin.from('entities').select('id, code, name');
 
     // Also test a raw query if possible or check error details
