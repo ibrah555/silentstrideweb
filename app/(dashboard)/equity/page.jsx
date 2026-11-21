@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase';
 import Link from 'next/link';
 import DeleteButton from '@/components/DeleteButton';
-
-const fmt = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+import { fmt } from '@/lib/format';
 export const dynamic = 'force-dynamic';
 
 export default async function EquityPage({ searchParams }) {
@@ -95,7 +94,7 @@ export default async function EquityPage({ searchParams }) {
             </label>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 10 }}>
-              <label className="f">Amount ($)
+              <label className="f">Amount (KSh)
                 <input name="amount" type="number" step="0.01" min="0.01" required placeholder="50000.00" />
               </label>
 

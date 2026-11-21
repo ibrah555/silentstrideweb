@@ -3,8 +3,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getCurrentUserRole } from '@/lib/auth';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
-
-const fmt = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+import { fmt } from '@/lib/format';
 
 export const dynamic = 'force-dynamic';
 
@@ -218,14 +217,14 @@ export default async function AgentPortal({ searchParams }) {
               </label>
 
               <label className="f">
-                Sale Total Amount ($)
+                Sale Total Amount (KSh)
                 <input
                   name="total_amount"
                   type="number"
                   step="0.01"
                   min="0.01"
                   required
-                  placeholder="e.g. 500.00"
+                  placeholder="e.g. 50000.00"
                 />
               </label>
 
@@ -245,7 +244,7 @@ export default async function AgentPortal({ searchParams }) {
                 fontSize: 12,
                 color: 'var(--muted)'
               }}>
-                ℹ Your commission rate is <b>{commissionRatePct}%</b>. For example, a $1,000.00 sale adds <b>${(1000 * Number(agent?.commission_rate || 0.10)).toFixed(2)}</b> to your pending balance automatically.
+                ℹ Your commission rate is <b>{commissionRatePct}%</b>. For example, a KSh 10,000.00 sale adds <b>{fmt(10000 * Number(agent?.commission_rate || 0.10))}</b> to your pending balance automatically.
               </div>
 
               <button className="btn gold" type="submit" style={{ justifyContent: 'center', marginTop: 4, padding: '10px 16px' }}>

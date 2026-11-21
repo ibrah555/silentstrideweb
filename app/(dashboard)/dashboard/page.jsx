@@ -1,8 +1,6 @@
 import { createClient } from '@/lib/supabase';
 import Link from 'next/link';
-
-const fmt = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const fmtK = n => n >= 1e6 ? '$' + (n / 1e6).toFixed(2) + 'M' : n >= 1e3 ? '$' + (n / 1e3).toFixed(1) + 'K' : fmt(n);
+import { fmt, fmtK } from '@/lib/format';
 
 export const dynamic = 'force-dynamic';
 

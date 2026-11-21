@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase';
-
-const fmt = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+import { fmt } from '@/lib/format';
 export const dynamic = 'force-dynamic';
 
 export default async function Ledger({ searchParams }) {
