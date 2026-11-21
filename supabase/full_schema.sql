@@ -294,13 +294,24 @@ drop policy if exists p_directors_all on expenses;
 drop policy if exists p_directors_all on ledger_entries;
 drop policy if exists p_agent_own_sales on sales;
 drop policy if exists p_agent_own_comm on commission_payments;
+drop policy if exists p_auth_read_entities on entities;
+drop policy if exists p_agent_own_profile on agents;
+drop policy if exists p_agents_read_inventory on inventory_items;
 
 -- Create policies
 create policy p_directors_all on entities for all using (is_director()) with check (is_director());
+create policy p_auth_read_entities on entities for select to authenticated using (true);
+
 create policy p_directors_all on owners for all using (is_director()) with check (is_director());
 create policy p_directors_all on capital_contributions for all using (is_director()) with check (is_director());
+
 create policy p_directors_all on agents for all using (is_director()) with check (is_director());
+create policy p_agent_own_profile on agents for select using (email = auth.jwt() ->> 'email');
+
 create policy p_directors_all on inventory_items for all using (is_director()) with check (is_director());
+create policy p_agents_read_inventory on inventory_items for select
+  using (entity_id in (select entity_id from agents where email = auth.jwt() ->> 'email'));
+
 create policy p_directors_all on sales for all using (is_director()) with check (is_director());
 create policy p_directors_all on commission_payments for all using (is_director()) with check (is_director());
 create policy p_directors_all on expenses for all using (is_director()) with check (is_director());

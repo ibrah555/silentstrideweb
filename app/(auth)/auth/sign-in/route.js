@@ -25,5 +25,5 @@ export async function POST(request) {
   if (error) {
     return NextResponse.redirect(new URL('/login?error=' + encodeURIComponent(error.message), request.url));
   }
-  return NextResponse.redirect(new URL('/dashboard', request.url));
+  return NextResponse.redirect(new URL('/', request.url));
 }
