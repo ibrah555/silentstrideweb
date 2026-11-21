@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase';
+import DeleteButton from '@/components/DeleteButton';
 
 const fmt = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const fmtK = n => n >= 1e3 ? '$' + (n / 1e3).toFixed(1) + 'K' : fmt(n);
@@ -151,16 +152,7 @@ export default async function SubsidiariesPage({ searchParams }) {
                         <form action="/api/subsidiaries" method="post" style={{ display: 'inline', margin: 0 }}>
                           <input type="hidden" name="action" value="delete" />
                           <input type="hidden" name="id" value={e.id} />
-                          <button
-                            type="submit"
-                            className="btn"
-                            style={{ padding: '3px 8px', fontSize: 11, background: '#FEE2E2', color: 'var(--danger)' }}
-                            onClick={(ev) => {
-                              if (!confirm(`Delete or archive ${e.name}?`)) ev.preventDefault();
-                            }}
-                          >
-                            Delete
-                          </button>
+                          <DeleteButton confirmText={`Delete or archive ${e.name}?`} />
                         </form>
                       )}
                     </div>

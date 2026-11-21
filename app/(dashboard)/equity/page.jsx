@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase';
 import Link from 'next/link';
+import DeleteButton from '@/components/DeleteButton';
 
 const fmt = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 export const dynamic = 'force-dynamic';
@@ -176,16 +177,7 @@ export default async function EquityPage({ searchParams }) {
                   <form action="/api/equity" method="post" style={{ display: 'inline', margin: 0 }}>
                     <input type="hidden" name="action" value="delete_capital" />
                     <input type="hidden" name="id" value={c.id} />
-                    <button
-                      type="submit"
-                      className="btn"
-                      style={{ padding: '3px 8px', fontSize: 11, background: '#FEE2E2', color: 'var(--danger)' }}
-                      onClick={(e) => {
-                        if (!confirm(`Reverse capital contribution of ${fmt(c.amount)}? Matching ledger entries will be deleted.`)) e.preventDefault();
-                      }}
-                    >
-                      Delete
-                    </button>
+                    <DeleteButton confirmText={`Reverse capital contribution of ${fmt(c.amount)}? Matching ledger entries will be deleted.`} />
                   </form>
                 </td>
               </tr>

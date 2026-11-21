@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase';
+import DeleteButton from '@/components/DeleteButton';
 
 const fmt = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 export const dynamic = 'force-dynamic';
@@ -201,16 +202,7 @@ export default async function AgentsPage({ searchParams }) {
                           <input type="hidden" name="action" value="delete" />
                           <input type="hidden" name="id" value={a.id} />
                           <input type="hidden" name="email" value={a.email} />
-                          <button
-                            type="submit"
-                            className="btn"
-                            style={{ padding: '3px 8px', fontSize: 11, background: '#FEE2E2', color: 'var(--danger)' }}
-                            onClick={(e) => {
-                              if (!confirm(`Delete agent ${a.full_name}?`)) e.preventDefault();
-                            }}
-                          >
-                            Delete
-                          </button>
+                          <DeleteButton confirmText={`Delete agent ${a.full_name}?`} />
                         </form>
                       </div>
                     </td>

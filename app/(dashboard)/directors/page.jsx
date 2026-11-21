@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase';
 import { getCurrentUserRole } from '@/lib/auth';
+import DeleteButton from '@/components/DeleteButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -169,16 +170,7 @@ export default async function DirectorsPage({ searchParams }) {
                             <input type="hidden" name="action" value="delete" />
                             <input type="hidden" name="id" value={o.id} />
                             <input type="hidden" name="email" value={o.email} />
-                            <button
-                              type="submit"
-                              className="btn"
-                              style={{ padding: '3px 8px', fontSize: 11, background: '#FEE2E2', color: 'var(--danger)' }}
-                              onClick={(e) => {
-                                if (!confirm(`Delete ${o.full_name}? This permanently removes their account.`)) e.preventDefault();
-                              }}
-                            >
-                              Delete
-                            </button>
+                            <DeleteButton confirmText={`Delete ${o.full_name}? This permanently removes their account.`} />
                           </form>
                         )}
                       </div>
