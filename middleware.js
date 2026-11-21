@@ -23,7 +23,7 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
   // Public routes
-  if (pathname.startsWith('/login') || pathname.startsWith('/auth')) {
+  if (pathname.startsWith('/login') || pathname.startsWith('/auth') || pathname.startsWith('/api/debug')) {
     if (user && pathname.startsWith('/login')) {
       return NextResponse.redirect(new URL('/', request.url));
     }

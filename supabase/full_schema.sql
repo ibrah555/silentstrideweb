@@ -329,3 +329,14 @@ insert into entities (code, name, kind, status, commission_rate) values
   ('SSN-LOG',  'SSN Logistics', 'subsidiary', 'planned', 0.10),
   ('SSN-TECH', 'SSN Digital', 'subsidiary', 'planned', 0.10)
 on conflict (code) do nothing;
+
+-- ---------- GRANTS & PRIVILEGES ----------
+grant usage on schema public to postgres, anon, authenticated, service_role;
+grant all on all tables in schema public to postgres, anon, authenticated, service_role;
+grant all on all routines in schema public to postgres, anon, authenticated, service_role;
+grant all on all sequences in schema public to postgres, anon, authenticated, service_role;
+
+alter default privileges in schema public grant all on tables to postgres, anon, authenticated, service_role;
+alter default privileges in schema public grant all on routines to postgres, anon, authenticated, service_role;
+alter default privileges in schema public grant all on sequences to postgres, anon, authenticated, service_role;
+
