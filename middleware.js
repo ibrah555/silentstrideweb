@@ -23,7 +23,15 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
   // Public routes
-  if (pathname.startsWith('/login') || pathname.startsWith('/auth') || pathname.startsWith('/api/debug')) {
+  if (
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/auth') ||
+    pathname.startsWith('/api/debug') ||
+    pathname.startsWith('/careers') ||
+    pathname.startsWith('/api/careers') ||
+    pathname.startsWith('/contract') ||
+    pathname.startsWith('/api/agents/contract')
+  ) {
     if (user && pathname.startsWith('/login')) {
       return NextResponse.redirect(new URL('/', request.url));
     }

@@ -8,6 +8,7 @@ const NAV = [
   { href: '/subsidiaries', label: 'Subsidiaries', icon: '▣' },
   { href: '/directors', label: 'Directors & Users', icon: '◈' },
   { href: '/equity', label: 'Equity & Capital', icon: '◎' },
+  { href: '/recruitment', label: 'Recruitment & Tests', icon: '★' },
   { href: '/agents', label: 'Sales Agents & Pay', icon: '☰' },
   { href: '/sales', label: 'Sales', icon: '✦' },
   { href: '/inventory', label: 'Inventory', icon: '▤' },
