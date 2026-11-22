@@ -20,7 +20,7 @@ export default async function RecruitmentPage() {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  // Fetch applications and subsidiaries
+  // Fetch applications, subsidiaries, and job openings
   let applications = [];
   try {
     const { data: apps, error } = await admin
@@ -35,6 +35,20 @@ export default async function RecruitmentPage() {
     console.error('Fetch applications error (may need migration):', err);
   }
 
+  let jobOpenings = [];
+  try {
+    const { data: jobs, error: jobsErr } = await admin
+      .from('job_openings')
+      .select('*, entities(id, code, name)')
+      .order('created_at', { ascending: false });
+
+    if (!jobsErr && jobs) {
+      jobOpenings = jobs;
+    }
+  } catch (err) {
+    console.error('Fetch job_openings error (may need migration):', err);
+  }
+
   const { data: entities } = await admin
     .from('entities')
     .select('id, name, code, kind')
@@ -44,7 +58,7 @@ export default async function RecruitmentPage() {
 
   // KPI calculations
   const totalApps = applications.length;
-  const assessedApps = applications.filter(a => a.test_completed_at).length;
+  const activeJobs = jobOpenings.filter(j => j.status === 'open' && (!j.closes_at || new Date().getTime() < new Date(j.closes_at).getTime())).length;
   const highScorers = applications.filter(a => (a.test_score || 0) >= 70).length;
   const hiredCount = applications.filter(a => a.status === 'hired' || a.agent_id).length;
 
@@ -68,9 +82,9 @@ export default async function RecruitmentPage() {
         </div>
 
         <div className="kpi" style={{ borderLeft: '4px solid #0284c7' }}>
-          <div className="l">Tests Completed</div>
-          <div className="v" style={{ color: '#0369a1' }}>{assessedApps}</div>
-          <div className="s">Finished online evaluation</div>
+          <div className="l">Active Job Openings</div>
+          <div className="v" style={{ color: '#0369a1' }}>{activeJobs}</div>
+          <div className="s">Live countdown windows</div>
         </div>
 
         <div className="kpi" style={{ borderLeft: '4px solid var(--gold)' }}>
@@ -88,6 +102,7 @@ export default async function RecruitmentPage() {
 
       <RecruitmentDashboard
         applications={applications}
+        jobOpenings={jobOpenings}
         entities={subsidiaries.length > 0 ? subsidiaries : (entities || [])}
       />
     </>

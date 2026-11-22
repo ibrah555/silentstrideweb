@@ -15,6 +15,7 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const {
+      jobId,
       fullName,
       email,
       phone,
@@ -39,6 +40,24 @@ export async function POST(request) {
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
+
+    // If jobId provided, check if the job opening is still open and deadline has not passed
+    if (jobId) {
+      const { data: job } = await admin
+        .from('job_openings')
+        .select('id, title, closes_at, status')
+        .eq('id', jobId)
+        .single();
+
+      if (job) {
+        if (job.status === 'closed' || (job.closes_at && new Date() > new Date(job.closes_at))) {
+          return NextResponse.json(
+            { error: `Applications for "${job.title}" have closed. Deadline was ${new Date(job.closes_at).toLocaleDateString()}.` },
+            { status: 400 }
+          );
+        }
+      }
+    }
 
     // Check if an application already exists with this email or phone
     const { data: existing } = await admin
@@ -73,6 +92,7 @@ export async function POST(request) {
       id_number: idNumber ? idNumber.trim() : null,
       residence: residence ? residence.trim() : null,
       entity_id: entityId || null,
+      job_id: jobId || null,
       position: position || 'Sales Agency Representative',
       bio: bio ? bio.trim() : null,
       experience: experience ? experience.trim() : null,

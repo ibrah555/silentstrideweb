@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
+import CountdownTimer from '@/components/CountdownTimer';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,13 +11,13 @@ export default async function CareersPage() {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const { data: entities } = await admin
-    .from('entities')
-    .select('id, name, code, kind, commission_rate')
-    .eq('status', 'active')
-    .order('name');
+  const [{ data: entities }, { data: jobs }] = await Promise.all([
+    admin.from('entities').select('id, name, code, kind, commission_rate').eq('status', 'active').order('name'),
+    admin.from('job_openings').select('*, entities(id, code, name)').order('created_at', { ascending: false })
+  ]);
 
   const subsidiaries = (entities || []).filter(e => e.kind === 'subsidiary');
+  const jobOpenings = jobs || [];
 
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#1A2430', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif' }}>
@@ -106,20 +107,80 @@ export default async function CareersPage() {
         </div>
       </section>
 
-      {/* Open Territories */}
+      {/* Open Job Positions & Deadlines */}
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 80px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
           <div>
-            <h2 style={{ fontSize: 24, fontWeight: 700, color: '#082138', margin: 0 }}>Open Positions & Territories</h2>
-            <p style={{ color: '#6B7684', fontSize: 14, marginTop: 4 }}>Select an active subsidiary to submit your application</p>
+            <h2 style={{ fontSize: 24, fontWeight: 700, color: '#082138', margin: 0 }}>Current Job Openings & Application Windows</h2>
+            <p style={{ color: '#6B7684', fontSize: 14, marginTop: 4 }}>Apply before the countdown timer expires for your designated territory</p>
           </div>
           <Link href="/careers/apply" style={{ color: '#AE8E4D', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
-            Open Application ➔
+            General Application ➔
           </Link>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
-          {subsidiaries.length > 0 ? (
+          {jobOpenings.length > 0 ? (
+            jobOpenings.map(job => {
+              const entityName = job.entities?.name || 'Silent Strides Network';
+              const entityCode = job.entities?.code || 'SSN';
+              const isClosed = job.status === 'closed' || (job.closes_at && new Date().getTime() >= new Date(job.closes_at).getTime());
+              const closeDateStr = job.closes_at ? new Date(job.closes_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : null;
+
+              return (
+                <div key={job.id} style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, gap: 8 }}>
+                      <div>
+                        <div style={{ fontSize: 12, color: '#AE8E4D', fontWeight: 700, letterSpacing: '0.06em' }}>{entityCode} • {entityName}</div>
+                        <h3 style={{ fontSize: 19, fontWeight: 700, color: '#082138', margin: '4px 0 6px' }}>{job.title}</h3>
+                        <div style={{ fontSize: 12, color: '#6B7684' }}>{job.role_type}</div>
+                      </div>
+                    </div>
+
+                    {/* Countdown Timer Badge */}
+                    <div style={{ marginBottom: 16 }}>
+                      <CountdownTimer closesAt={job.closes_at} opensAt={job.opens_at} status={job.status} />
+                    </div>
+
+                    <p style={{ fontSize: 13, color: '#6B7684', lineHeight: 1.5, marginBottom: 16 }}>
+                      {job.description || 'Responsible for field client acquisition, retail outlet management, and sales volume expansion.'}
+                    </p>
+
+                    <div style={{ background: '#F7F6F2', border: '1px solid #E4E1D8', borderRadius: 8, padding: '10px 14px', fontSize: 12, color: '#1A2430', marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#6B7684' }}>Commission Rate:</span>
+                        <b>{Math.round((job.commission_rate || 0.1) * 100)}%</b>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#6B7684' }}>Positions / Slots:</span>
+                        <b>{job.slots || 5} agents</b>
+                      </div>
+                      {closeDateStr && (
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span style={{ color: '#6B7684' }}>Application Deadline:</span>
+                          <b style={{ color: isClosed ? '#B3372F' : '#082138' }}>{closeDateStr}</b>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {isClosed ? (
+                    <div style={{ textAlign: 'center', background: '#FEE2E2', border: '1px solid #FECACA', color: '#991B1B', padding: '10px 16px', borderRadius: 8, fontWeight: 700, fontSize: 13 }}>
+                      Applications Closed
+                    </div>
+                  ) : (
+                    <Link
+                      href={`/careers/apply?job=${job.id}`}
+                      style={{ display: 'block', textAlign: 'center', background: '#082138', color: '#FFFFFF', padding: '11px 16px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 2px 8px rgba(8,33,56,0.1)' }}
+                    >
+                      Apply for this Position ➔
+                    </Link>
+                  )}
+                </div>
+              );
+            })
+          ) : subsidiaries.length > 0 ? (
             subsidiaries.map(sub => (
               <div key={sub.id} style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>

@@ -11,14 +11,15 @@ export default async function ApplyPage({ searchParams }) {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const { data: entities } = await admin
-    .from('entities')
-    .select('id, name, code, kind')
-    .eq('status', 'active')
-    .order('name');
+  const jobId = searchParams?.job || '';
+  const preselectedSubsidiary = searchParams?.subsidiary || '';
+
+  const [{ data: entities }, { data: job }] = await Promise.all([
+    admin.from('entities').select('id, name, code, kind').eq('status', 'active').order('name'),
+    jobId ? admin.from('job_openings').select('*, entities(id, code, name)').eq('id', jobId).single() : Promise.resolve({ data: null })
+  ]);
 
   const subsidiaries = (entities || []).filter(e => e.kind === 'subsidiary');
-  const preselectedSubsidiary = searchParams?.subsidiary || '';
 
   return (
     <div style={{ minHeight: '100vh', background: '#F7F6F2', color: '#1A2430', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif', paddingBottom: 80 }}>
@@ -50,7 +51,7 @@ export default async function ApplyPage({ searchParams }) {
             STEP 1 OF 2
           </div>
           <h1 style={{ fontSize: 32, fontWeight: 800, color: '#082138', margin: '0 0 10px' }}>
-            Sales Agency Partner Application
+            {job ? `Application for ${job.title}` : 'Sales Agency Partner Application'}
           </h1>
           <p style={{ color: '#6B7684', fontSize: 15, maxWidth: 600, margin: '0 auto' }}>
             Complete your profile and text CV below. Once submitted, you will immediately take the online evaluation assessment.
@@ -59,7 +60,8 @@ export default async function ApplyPage({ searchParams }) {
 
         <ApplicationForm
           subsidiaries={subsidiaries}
-          preselectedSubsidiary={preselectedSubsidiary}
+          preselectedSubsidiary={job?.entity_id || preselectedSubsidiary}
+          job={job}
         />
       </main>
     </div>

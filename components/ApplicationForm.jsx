@@ -3,17 +3,25 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import CountdownTimer from './CountdownTimer';
 
-export default function ApplicationForm({ subsidiaries = [], preselectedSubsidiary = '' }) {
+export default function ApplicationForm({ subsidiaries = [], preselectedSubsidiary = '', job = null }) {
   const router = useRouter();
 
+  const isJobClosed = job && (
+    job.status === 'closed' ||
+    (job.closes_at && new Date().getTime() >= new Date(job.closes_at).getTime())
+  );
+
   const [formData, setFormData] = useState({
+    jobId: job?.id || '',
     fullName: '',
     email: '',
     phone: '',
     idNumber: '',
     residence: '',
-    entityId: preselectedSubsidiary || (subsidiaries[0]?.id || ''),
+    entityId: job?.entity_id || preselectedSubsidiary || (subsidiaries[0]?.id || ''),
+    position: job?.title || 'Sales Agency Representative',
     bio: '',
     experience: '',
     education: '',
@@ -31,6 +39,11 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isJobClosed) {
+      setError('Applications for this position are currently closed.');
+      return;
+    }
+
     setError(null);
     setLoading(true);
 
@@ -104,6 +117,44 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {/* Job opening banner with timer */}
+      {job && (
+        <div style={{
+          background: '#FFFFFF',
+          border: isJobClosed ? '1px solid #FECACA' : '1px solid #E4E1D8',
+          borderRadius: 12,
+          padding: 20,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 16
+        }}>
+          <div>
+            <div style={{ fontSize: 11, color: '#AE8E4D', fontWeight: 700, letterSpacing: '0.04em' }}>
+              TARGET APPLICATION POSITION
+            </div>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#082138', margin: '4px 0 2px' }}>
+              {job.title}
+            </h2>
+            <div style={{ fontSize: 13, color: '#6B7684' }}>
+              Territory: <b>{job.entities?.name || 'General Network'}</b> • Rate: <b>{Math.round((job.commission_rate || 0.1) * 100)}%</b>
+            </div>
+          </div>
+
+          <div>
+            <CountdownTimer closesAt={job.closes_at} opensAt={job.opens_at} status={job.status} />
+          </div>
+        </div>
+      )}
+
+      {isJobClosed && (
+        <div style={{ background: '#FEE2E2', border: '1px solid #FECACA', color: '#991B1B', padding: '14px 18px', borderRadius: 8, fontSize: 14, fontWeight: 600 }}>
+          ⚠ Applications for this position have closed. You can explore other open positions on the <Link href="/careers" style={{ color: '#991B1B', textDecoration: 'underline' }}>Careers page</Link>.
+        </div>
+      )}
+
       {error && (
         <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B3372F', padding: '12px 16px', borderRadius: 8, fontSize: 14 }}>
           ⚠ {error}
@@ -124,6 +175,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
               type="text"
               name="fullName"
               required
+              disabled={isJobClosed}
               value={formData.fullName}
               onChange={handleChange}
               placeholder="e.g. Kennedy Omondi Mwangi"
@@ -139,6 +191,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
               type="email"
               name="email"
               required
+              disabled={isJobClosed}
               value={formData.email}
               onChange={handleChange}
               placeholder="e.g. candidate@example.com"
@@ -154,6 +207,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
               type="tel"
               name="phone"
               required
+              disabled={isJobClosed}
               value={formData.phone}
               onChange={handleChange}
               placeholder="e.g. 0712 345 678"
@@ -168,6 +222,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
             <input
               type="text"
               name="idNumber"
+              disabled={isJobClosed}
               value={formData.idNumber}
               onChange={handleChange}
               placeholder="e.g. 31245678"
@@ -182,6 +237,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
             <input
               type="text"
               name="residence"
+              disabled={isJobClosed}
               value={formData.residence}
               onChange={handleChange}
               placeholder="e.g. Eldoret / Uasin Gishu"
@@ -191,11 +247,12 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
 
           <div>
             <label style={{ display: 'block', fontSize: 13, color: '#6B7684', marginBottom: 6, fontWeight: 500 }}>
-              Preferred Subsidiary / Territory *
+              Designated Subsidiary / Territory *
             </label>
             <select
               name="entityId"
               required
+              disabled={isJobClosed || !!job?.entity_id}
               value={formData.entityId}
               onChange={handleChange}
               style={{ width: '100%', padding: '10px 12px', background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 8, color: '#1A2430', fontSize: 14 }}
@@ -228,6 +285,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
             <textarea
               name="bio"
               rows={3}
+              disabled={isJobClosed}
               value={formData.bio}
               onChange={handleChange}
               placeholder="Brief overview of yourself, your energy, and why you are excited to represent Silent Strides Network..."
@@ -243,6 +301,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
               name="experience"
               rows={4}
               required
+              disabled={isJobClosed}
               value={formData.experience}
               onChange={handleChange}
               placeholder="e.g. 2023 - 2025: Field Sales Rep at ABC Distributors. Managed 30 retail shops in Eldoret, exceeded monthly sales quota by 15%..."
@@ -257,6 +316,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
             <textarea
               name="education"
               rows={2}
+              disabled={isJobClosed}
               value={formData.education}
               onChange={handleChange}
               placeholder="e.g. Diploma in Business Management / KCSE Certificate / Certificate in Sales & Marketing..."
@@ -272,6 +332,7 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
               name="referees"
               rows={3}
               required
+              disabled={isJobClosed}
               value={formData.referees}
               onChange={handleChange}
               placeholder="1. Jane Doe - Former Supervisor, ABC Ltd - Tel: 0722 000 000&#10;2. John Kamau - Community Leader / Pastor - Tel: 0733 000 000"
@@ -283,20 +344,20 @@ export default function ApplicationForm({ subsidiaries = [], preselectedSubsidia
 
       <button
         type="submit"
-        disabled={loading}
+        disabled={loading || isJobClosed}
         style={{
-          background: loading ? '#6B7684' : '#082138',
-          color: '#FFFFFF',
+          background: isJobClosed ? '#CBD5E1' : loading ? '#6B7684' : '#082138',
+          color: isJobClosed ? '#64748B' : '#FFFFFF',
           padding: '16px 32px',
           borderRadius: 8,
           fontWeight: 700,
           fontSize: 15,
           border: 'none',
-          cursor: loading ? 'not-allowed' : 'pointer',
-          boxShadow: '0 4px 12px rgba(8,33,56,0.15)',
+          cursor: isJobClosed || loading ? 'not-allowed' : 'pointer',
+          boxShadow: isJobClosed ? 'none' : '0 4px 12px rgba(8,33,56,0.15)',
         }}
       >
-        {loading ? 'Submitting Application...' : 'Submit Application & Continue to Evaluation Test ➔'}
+        {isJobClosed ? 'Applications Closed for this Position' : loading ? 'Submitting Application...' : 'Submit Application & Continue to Evaluation Test ➔'}
       </button>
     </form>
   );
