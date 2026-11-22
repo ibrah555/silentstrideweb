@@ -39,30 +39,30 @@ export default function StatusLookup({ initialQuery = '' }) {
     switch (status) {
       case 'hired':
       case 'approved':
-        return { bg: 'rgba(34,197,94,0.15)', text: '#4ade80', label: 'APPROVED / ONBOARDED' };
+        return { bg: '#E4F2EA', text: '#1E7F4F', label: 'APPROVED / ONBOARDED' };
       case 'interview_scheduled':
-        return { bg: 'rgba(56,189,248,0.15)', text: '#38bdf8', label: 'INTERVIEW SCHEDULED' };
+        return { bg: '#E0F2FE', text: '#0369A1', label: 'INTERVIEW SCHEDULED' };
       case 'under_review':
-        return { bg: 'rgba(234,179,8,0.15)', text: '#facc15', label: 'BOARD REVIEW IN PROGRESS' };
+        return { bg: '#F3EBDC', text: '#7A6234', label: 'BOARD REVIEW IN PROGRESS' };
       case 'assessed':
-        return { bg: 'rgba(212,175,55,0.15)', text: '#D4AF37', label: 'ASSESSMENT COMPLETED' };
+        return { bg: '#F3EBDC', text: '#7A6234', label: 'ASSESSMENT COMPLETED' };
       case 'rejected':
-        return { bg: 'rgba(248,113,113,0.15)', text: '#f87171', label: 'NOT SUCCESSFUL' };
+        return { bg: '#F7E4E2', text: '#B3372F', label: 'NOT SUCCESSFUL' };
       case 'applied':
       default:
-        return { bg: 'rgba(148,163,184,0.15)', text: '#94a3b8', label: 'ASSESSMENT PENDING' };
+        return { bg: '#ECEAE4', text: '#6B7684', label: 'ASSESSMENT PENDING' };
     }
   };
 
   return (
     <div>
       {/* Search Input Box */}
-      <form onSubmit={handleSearch} style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 24, marginBottom: 32 }}>
-        <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#fff', marginBottom: 8 }}>
+      <form onSubmit={handleSearch} style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 24, marginBottom: 32, boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+        <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#082138', marginBottom: 6 }}>
           Find Your Application
         </label>
-        <p style={{ color: '#94a3b8', fontSize: 13, marginBottom: 16 }}>
-          Enter your Application Reference Code (e.g. <span style={{ color: '#D4AF37' }}>SSN-2026-ABCD</span>), Email address, or Phone Number:
+        <p style={{ color: '#6B7684', fontSize: 13, marginBottom: 16 }}>
+          Enter your Application Reference Code (e.g. <span style={{ color: '#AE8E4D', fontWeight: 600 }}>SSN-2026-ABCD</span>), Email address, or Phone Number:
         </p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <input
@@ -71,14 +71,14 @@ export default function StatusLookup({ initialQuery = '' }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g. SSN-2026-ABCD or 0712345678"
-            style={{ flex: 1, minWidth: 240, padding: '12px 16px', background: '#0f172a', border: '1px solid #334155', borderRadius: 8, color: '#fff', fontSize: 14 }}
+            style={{ flex: 1, minWidth: 240, padding: '12px 16px', background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 8, color: '#1A2430', fontSize: 14 }}
           />
           <button
             type="submit"
             disabled={loading}
             style={{
-              background: '#D4AF37',
-              color: '#0f172a',
+              background: '#082138',
+              color: '#FFFFFF',
               padding: '12px 24px',
               borderRadius: 8,
               fontWeight: 700,
@@ -93,29 +93,29 @@ export default function StatusLookup({ initialQuery = '' }) {
       </form>
 
       {error && (
-        <div style={{ background: '#451a1a', border: '1px solid #f87171', color: '#fca5a5', padding: '16px', borderRadius: 10, textAlign: 'center', marginBottom: 24 }}>
+        <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B3372F', padding: '16px', borderRadius: 10, textAlign: 'center', marginBottom: 24 }}>
           {error}
         </div>
       )}
 
       {searched && !application && !error && !loading && (
-        <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 12, padding: 32, textAlign: 'center', color: '#94a3b8' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 32, textAlign: 'center', color: '#6B7684' }}>
           No application found matching &ldquo;{query}&rdquo;. Please verify your reference code or contact details.
         </div>
       )}
 
       {application && (
-        <div style={{ background: '#1e293b', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 16, padding: '32px 28px' }}>
+        <div style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 16, padding: '32px 28px', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: 20, marginBottom: 24 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, borderBottom: '1px solid #E4E1D8', paddingBottom: 20, marginBottom: 24 }}>
             <div>
-              <div style={{ fontSize: 12, color: '#D4AF37', fontWeight: 700, letterSpacing: '0.06em' }}>
+              <div style={{ fontSize: 12, color: '#AE8E4D', fontWeight: 700, letterSpacing: '0.06em' }}>
                 APPLICATION REF: {application.app_code}
               </div>
-              <h2 style={{ fontSize: 24, fontWeight: 800, color: '#fff', margin: '4px 0 6px' }}>
+              <h2 style={{ fontSize: 24, fontWeight: 800, color: '#082138', margin: '4px 0 6px' }}>
                 {application.full_name}
               </h2>
-              <div style={{ color: '#94a3b8', fontSize: 13 }}>
+              <div style={{ color: '#6B7684', fontSize: 13 }}>
                 Role: <b>{application.position}</b> • Applied: {new Date(application.created_at).toLocaleDateString()}
               </div>
             </div>
@@ -134,48 +134,48 @@ export default function StatusLookup({ initialQuery = '' }) {
 
           {/* Stepper Timeline */}
           <div style={{ marginBottom: 32 }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: '#D4AF37', letterSpacing: '0.04em', marginBottom: 16 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: '#082138', letterSpacing: '0.02em', marginBottom: 16 }}>
               APPLICATION PROGRESSION
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {/* Step 1 */}
-              <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 10, padding: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#4ade80', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
+              <div style={{ background: '#F7F6F2', border: '1px solid #E4E1D8', borderRadius: 10, padding: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#1E7F4F', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
                   <span>✓</span> 1. Application Submitted
                 </div>
-                <div style={{ fontSize: 12, color: '#94a3b8' }}>Profile & text CV registered</div>
+                <div style={{ fontSize: 12, color: '#6B7684' }}>Profile & text CV registered</div>
               </div>
 
               {/* Step 2 */}
               <div style={{
-                background: '#0f172a',
-                border: application.test_completed_at ? '1px solid #4ade80' : '1px solid #D4AF37',
+                background: '#F7F6F2',
+                border: application.test_completed_at ? '1px solid #1E7F4F' : '1px solid #AE8E4D',
                 borderRadius: 10,
                 padding: 16
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: application.test_completed_at ? '#4ade80' : '#D4AF37', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: application.test_completed_at ? '#1E7F4F' : '#AE8E4D', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
                   <span>{application.test_completed_at ? '✓' : '●'}</span> 2. Online Evaluation Test
                 </div>
-                <div style={{ fontSize: 12, color: '#94a3b8' }}>
+                <div style={{ fontSize: 12, color: '#6B7684' }}>
                   {application.test_completed_at ? (
-                    <span style={{ color: '#4ade80', fontWeight: 600 }}>Score: {application.test_score}% (Completed)</span>
+                    <span style={{ color: '#1E7F4F', fontWeight: 600 }}>Score: {application.test_score}% (Completed)</span>
                   ) : (
-                    <span style={{ color: '#facc15' }}>Action Required</span>
+                    <span style={{ color: '#7A6234', fontWeight: 600 }}>Action Required</span>
                   )}
                 </div>
               </div>
 
               {/* Step 3 */}
               <div style={{
-                background: '#0f172a',
-                border: ['approved', 'hired'].includes(application.status) ? '1px solid #4ade80' : '1px solid #334155',
+                background: '#F7F6F2',
+                border: ['approved', 'hired'].includes(application.status) ? '1px solid #1E7F4F' : '1px solid #E4E1D8',
                 borderRadius: 10,
                 padding: 16
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: ['approved', 'hired'].includes(application.status) ? '#4ade80' : '#cbd5e1', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: ['approved', 'hired'].includes(application.status) ? '#1E7F4F' : '#1A2430', fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
                   <span>{['approved', 'hired'].includes(application.status) ? '✓' : '○'}</span> 3. Final Decision & Contract
                 </div>
-                <div style={{ fontSize: 12, color: '#94a3b8' }}>
+                <div style={{ fontSize: 12, color: '#6B7684' }}>
                   {['approved', 'hired'].includes(application.status) ? 'Approved by Board' : 'Pending Review'}
                 </div>
               </div>
@@ -184,18 +184,18 @@ export default function StatusLookup({ initialQuery = '' }) {
 
           {/* Action Callouts */}
           {!application.test_completed_at && (
-            <div style={{ background: 'rgba(212,175,55,0.12)', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 12, padding: 20, marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+            <div style={{ background: '#F3EBDC', border: '1px solid #E4E1D8', borderRadius: 12, padding: 20, marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
               <div>
-                <div style={{ color: '#fff', fontWeight: 700, fontSize: 15, marginBottom: 4 }}>
+                <div style={{ color: '#082138', fontWeight: 700, fontSize: 15, marginBottom: 4 }}>
                   Pending Action: Complete Your Evaluation Test
                 </div>
-                <div style={{ color: '#94a3b8', fontSize: 13 }}>
+                <div style={{ color: '#6B7684', fontSize: 13 }}>
                   Your application will be forwarded to the Directors once the 5-minute online test is finished.
                 </div>
               </div>
               <Link
                 href={`/careers/assessment/${application.id}`}
-                style={{ background: '#D4AF37', color: '#0f172a', padding: '10px 20px', borderRadius: 8, fontWeight: 800, fontSize: 14, textDecoration: 'none' }}
+                style={{ background: '#082138', color: '#FFFFFF', padding: '10px 20px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
               >
                 Take Evaluation Test ➔
               </Link>
@@ -203,18 +203,18 @@ export default function StatusLookup({ initialQuery = '' }) {
           )}
 
           {application.agent_id && (
-            <div style={{ background: 'rgba(34,197,94,0.12)', border: '1px solid rgba(34,197,94,0.4)', borderRadius: 12, padding: 20, marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+            <div style={{ background: '#E4F2EA', border: '1px solid #A7F3D0', borderRadius: 12, padding: 20, marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
               <div>
-                <div style={{ color: '#4ade80', fontWeight: 700, fontSize: 15, marginBottom: 4 }}>
+                <div style={{ color: '#1E7F4F', fontWeight: 700, fontSize: 15, marginBottom: 4 }}>
                   🎉 Congratulations! Your Application Was Approved
                 </div>
-                <div style={{ color: '#cbd5e1', fontSize: 13 }}>
+                <div style={{ color: '#1A2430', fontSize: 13 }}>
                   Your official Commercial Sales Agency Agreement is generated and ready for electronic signature.
                 </div>
               </div>
               <Link
                 href={`/contract/${application.agent_id}`}
-                style={{ background: '#22c55e', color: '#fff', padding: '10px 24px', borderRadius: 8, fontWeight: 800, fontSize: 14, textDecoration: 'none' }}
+                style={{ background: '#1E7F4F', color: '#FFFFFF', padding: '10px 24px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
               >
                 View & Sign Official Contract ➔
               </Link>

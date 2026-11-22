@@ -81,13 +81,13 @@ export default function AssessmentTest({ application }) {
     const isPassing = (result.scorePct || 0) >= 70;
 
     return (
-      <div style={{ background: '#1e293b', border: '1px solid rgba(212,175,55,0.4)', borderRadius: 16, padding: '48px 32px', textAlign: 'center' }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 16, padding: '48px 32px', textAlign: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
         <div style={{
           width: 80,
           height: 80,
           borderRadius: 40,
-          background: isPassing ? 'rgba(34,197,94,0.15)' : 'rgba(234,179,8,0.15)',
-          color: isPassing ? '#4ade80' : '#facc15',
+          background: isPassing ? '#E4F2EA' : '#F3EBDC',
+          color: isPassing ? '#1E7F4F' : '#7A6234',
           fontSize: 36,
           display: 'flex',
           alignItems: 'center',
@@ -97,15 +97,15 @@ export default function AssessmentTest({ application }) {
           {isPassing ? '★' : '✓'}
         </div>
 
-        <div style={{ fontSize: 13, color: '#D4AF37', fontWeight: 700, letterSpacing: '0.08em', marginBottom: 8 }}>
+        <div style={{ fontSize: 13, color: '#AE8E4D', fontWeight: 700, letterSpacing: '0.06em', marginBottom: 8 }}>
           {result.justSubmitted ? 'ASSESSMENT COMPLETED & RECORDED' : 'OFFICIAL ASSESSMENT RECORD'}
         </div>
 
-        <h2 style={{ fontSize: 28, fontWeight: 800, color: '#fff', marginBottom: 16 }}>
-          Evaluation Score: <span style={{ color: isPassing ? '#4ade80' : '#D4AF37' }}>{result.scorePct}%</span>
+        <h2 style={{ fontSize: 28, fontWeight: 800, color: '#082138', marginBottom: 16 }}>
+          Evaluation Score: <span style={{ color: isPassing ? '#1E7F4F' : '#AE8E4D' }}>{result.scorePct}%</span>
         </h2>
 
-        <p style={{ color: '#94a3b8', fontSize: 15, maxWidth: 540, margin: '0 auto 24px', lineHeight: 1.6 }}>
+        <p style={{ color: '#6B7684', fontSize: 15, maxWidth: 540, margin: '0 auto 24px', lineHeight: 1.6 }}>
           {isPassing ? (
             <>
               Excellent performance! You scored high on sales strategy, ethics, and territory management. Your file and written pitch are now pending review with the <b>Silent Strides Board of Directors</b>.
@@ -117,18 +117,18 @@ export default function AssessmentTest({ application }) {
           )}
         </p>
 
-        <div style={{ background: '#0f172a', border: '1px solid #334155', borderRadius: 12, padding: 20, maxWidth: 440, margin: '0 auto 32px', textAlign: 'left', fontSize: 14 }}>
+        <div style={{ background: '#F7F6F2', border: '1px solid #E4E1D8', borderRadius: 12, padding: 20, maxWidth: 440, margin: '0 auto 32px', textAlign: 'left', fontSize: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ color: '#94a3b8' }}>Applicant Name:</span>
-            <span style={{ color: '#fff', fontWeight: 600 }}>{application.full_name}</span>
+            <span style={{ color: '#6B7684' }}>Applicant Name:</span>
+            <span style={{ color: '#082138', fontWeight: 600 }}>{application.full_name}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ color: '#94a3b8' }}>Application Ref:</span>
-            <span style={{ color: '#D4AF37', fontWeight: 700 }}>{application.app_code}</span>
+            <span style={{ color: '#6B7684' }}>Application Ref:</span>
+            <span style={{ color: '#AE8E4D', fontWeight: 700 }}>{application.app_code}</span>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ color: '#94a3b8' }}>Current Status:</span>
-            <span style={{ color: '#38bdf8', fontWeight: 600, textTransform: 'capitalize' }}>
+            <span style={{ color: '#6B7684' }}>Current Status:</span>
+            <span style={{ color: '#082138', fontWeight: 600, textTransform: 'capitalize' }}>
               {application.status === 'applied' ? 'Assessed / Under Review' : application.status.replace('_', ' ')}
             </span>
           </div>
@@ -137,13 +137,13 @@ export default function AssessmentTest({ application }) {
         <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
           <Link
             href="/careers/status"
-            style={{ background: '#D4AF37', color: '#0f172a', padding: '12px 28px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none' }}
+            style={{ background: '#082138', color: '#FFFFFF', padding: '12px 28px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none' }}
           >
             Track Application Status ➔
           </Link>
           <Link
             href="/careers"
-            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '12px 24px', borderRadius: 8, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}
+            style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', color: '#1A2430', padding: '12px 24px', borderRadius: 8, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}
           >
             Back to Careers Home
           </Link>
@@ -155,20 +155,20 @@ export default function AssessmentTest({ application }) {
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
       {error && (
-        <div style={{ background: '#451a1a', border: '1px solid #f87171', color: '#fca5a5', padding: '14px 18px', borderRadius: 8, fontSize: 14 }}>
+        <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B3372F', padding: '14px 18px', borderRadius: 8, fontSize: 14 }}>
           ⚠ {error}
         </div>
       )}
 
       {/* Header Info */}
-      <div style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.25)', borderRadius: 12, padding: 20 }}>
+      <div style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <div style={{ fontSize: 12, color: '#D4AF37', fontWeight: 700 }}>CANDIDATE EVALUATION INTERVIEW</div>
-            <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>{application.full_name}</div>
+            <div style={{ fontSize: 12, color: '#AE8E4D', fontWeight: 700, letterSpacing: '0.04em' }}>CANDIDATE EVALUATION INTERVIEW</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#082138' }}>{application.full_name}</div>
           </div>
-          <div style={{ fontSize: 13, color: '#94a3b8' }}>
-            Ref Code: <b style={{ color: '#D4AF37' }}>{application.app_code}</b>
+          <div style={{ fontSize: 13, color: '#6B7684' }}>
+            Ref Code: <b style={{ color: '#082138' }}>{application.app_code}</b>
           </div>
         </div>
       </div>
@@ -176,10 +176,10 @@ export default function AssessmentTest({ application }) {
       {/* Part 1: Multiple Choice Questions */}
       <div>
         <div style={{ marginBottom: 16 }}>
-          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#fff', margin: '0 0 4px' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#082138', margin: '0 0 4px' }}>
             Part 1: Sales Aptitude & Commercial Ethics
           </h3>
-          <p style={{ color: '#94a3b8', fontSize: 13, margin: 0 }}>
+          <p style={{ color: '#6B7684', fontSize: 13, margin: 0 }}>
             Choose the most effective and ethical answer for each field situation below.
           </p>
         </div>
@@ -189,20 +189,21 @@ export default function AssessmentTest({ application }) {
             <div
               key={q.id}
               style={{
-                background: '#1e293b',
-                border: answers[q.id] ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(255,255,255,0.08)',
+                background: '#FFFFFF',
+                border: answers[q.id] ? '1px solid #AE8E4D' : '1px solid #E4E1D8',
                 borderRadius: 12,
                 padding: 24,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <span style={{ background: '#0f172a', color: '#D4AF37', padding: '2px 8px', borderRadius: 6, fontSize: 12, fontWeight: 700 }}>
+                <span style={{ background: '#082138', color: '#FFFFFF', padding: '2px 8px', borderRadius: 6, fontSize: 12, fontWeight: 700 }}>
                   Question {idx + 1}
                 </span>
-                <span style={{ color: '#64748b', fontSize: 12 }}>• {q.category}</span>
+                <span style={{ color: '#6B7684', fontSize: 12 }}>• {q.category}</span>
               </div>
 
-              <div style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 16, lineHeight: 1.5 }}>
+              <div style={{ fontSize: 15, fontWeight: 600, color: '#082138', marginBottom: 16, lineHeight: 1.5 }}>
                 {q.question}
               </div>
 
@@ -219,8 +220,8 @@ export default function AssessmentTest({ application }) {
                         gap: 12,
                         padding: '12px 16px',
                         borderRadius: 8,
-                        background: isSelected ? 'rgba(212,175,55,0.15)' : '#0f172a',
-                        border: isSelected ? '1px solid #D4AF37' : '1px solid #334155',
+                        background: isSelected ? '#F3EBDC' : '#FFFFFF',
+                        border: isSelected ? '1px solid #AE8E4D' : '1px solid #E4E1D8',
                         cursor: 'pointer',
                         transition: 'all 0.15s ease',
                       }}
@@ -231,9 +232,9 @@ export default function AssessmentTest({ application }) {
                         value={opt.id}
                         checked={isSelected}
                         onChange={() => {}}
-                        style={{ marginTop: 3, accentColor: '#D4AF37' }}
+                        style={{ marginTop: 3, accentColor: '#082138' }}
                       />
-                      <span style={{ fontSize: 14, color: isSelected ? '#fff' : '#cbd5e1', lineHeight: 1.4 }}>
+                      <span style={{ fontSize: 14, color: isSelected ? '#082138' : '#1A2430', lineHeight: 1.4, fontWeight: isSelected ? 500 : 400 }}>
                         {opt.text}
                       </span>
                     </label>
@@ -248,21 +249,21 @@ export default function AssessmentTest({ application }) {
       {/* Part 2: Written Evaluative Pitches */}
       <div>
         <div style={{ marginBottom: 16 }}>
-          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#fff', margin: '0 0 4px' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#082138', margin: '0 0 4px' }}>
             Part 2: Written Field Pitch & Territory Assessment
           </h3>
-          <p style={{ color: '#94a3b8', fontSize: 13, margin: 0 }}>
+          <p style={{ color: '#6B7684', fontSize: 13, margin: 0 }}>
             These responses will be reviewed directly by the Silent Strides Board of Directors during final hiring selection.
           </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {WRITTEN_PITCH_QUESTIONS.map(p => (
-            <div key={p.id} style={{ background: '#1e293b', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12, padding: 24 }}>
-              <label style={{ display: 'block', fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 8 }}>
+            <div key={p.id} style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+              <label style={{ display: 'block', fontSize: 15, fontWeight: 600, color: '#082138', marginBottom: 6 }}>
                 {p.label}
               </label>
-              <div style={{ fontSize: 13, color: '#94a3b8', marginBottom: 12, lineHeight: 1.5 }}>
+              <div style={{ fontSize: 13, color: '#6B7684', marginBottom: 12, lineHeight: 1.5 }}>
                 {p.prompt}
               </div>
               <textarea
@@ -274,10 +275,10 @@ export default function AssessmentTest({ application }) {
                 style={{
                   width: '100%',
                   padding: '12px 14px',
-                  background: '#0f172a',
-                  border: '1px solid #334155',
+                  background: '#FFFFFF',
+                  border: '1px solid #E4E1D8',
                   borderRadius: 8,
-                  color: '#fff',
+                  color: '#1A2430',
                   fontSize: 14,
                   lineHeight: 1.5,
                   fontFamily: 'inherit',
@@ -292,15 +293,15 @@ export default function AssessmentTest({ application }) {
         type="submit"
         disabled={submitting}
         style={{
-          background: submitting ? '#64748b' : '#D4AF37',
-          color: '#0f172a',
+          background: submitting ? '#6B7684' : '#082138',
+          color: '#FFFFFF',
           padding: '16px 32px',
-          borderRadius: 10,
-          fontWeight: 800,
-          fontSize: 16,
+          borderRadius: 8,
+          fontWeight: 700,
+          fontSize: 15,
           border: 'none',
           cursor: submitting ? 'not-allowed' : 'pointer',
-          boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
+          boxShadow: '0 4px 12px rgba(8,33,56,0.15)',
         }}
       >
         {submitting ? 'Evaluating & Submitting Answers...' : 'Submit Evaluation Assessment to Board ➔'}

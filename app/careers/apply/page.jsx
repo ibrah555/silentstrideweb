@@ -21,22 +21,22 @@ export default async function ApplyPage({ searchParams }) {
   const preselectedSubsidiary = searchParams?.subsidiary || '';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0f1d', color: '#f1f5f9', fontFamily: 'system-ui, -apple-system, sans-serif', paddingBottom: 80 }}>
+    <div style={{ minHeight: '100vh', background: '#F7F6F2', color: '#1A2430', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif', paddingBottom: 80 }}>
       {/* Top Navigation */}
-      <header style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(12px)', position: 'sticky', top: 0, zIndex: 50 }}>
+      <header style={{ borderBottom: '1px solid #E4E1D8', background: '#FFFFFF', position: 'sticky', top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: 840, margin: '0 auto', padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Link href="/careers" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
-            <Image src="/logo.jpg" alt="Silent Strides Network" width={34} height={34} style={{ borderRadius: 8 }} />
+            <Image src="/logo.jpg" alt="Silent Strides Network" width={34} height={34} style={{ borderRadius: 8, border: '1px solid #E4E1D8' }} />
             <div>
-              <div style={{ fontWeight: 700, fontSize: 15, color: '#fff' }}>SILENT STRIDES</div>
-              <div style={{ fontSize: 10, color: '#D4AF37', letterSpacing: '0.1em', fontWeight: 600 }}>CAREERS PORTAL</div>
+              <div style={{ fontWeight: 700, fontSize: 15, color: '#082138' }}>SILENT STRIDES</div>
+              <div style={{ fontSize: 11, color: '#AE8E4D', letterSpacing: '0.08em', fontWeight: 600 }}>CAREERS PORTAL</div>
             </div>
           </Link>
           <div style={{ display: 'flex', gap: 16 }}>
-            <Link href="/careers" style={{ color: '#94a3b8', fontSize: 14, textDecoration: 'none' }}>
+            <Link href="/careers" style={{ color: '#6B7684', fontSize: 14, textDecoration: 'none' }}>
               ← All Positions
             </Link>
-            <Link href="/careers/status" style={{ color: '#D4AF37', fontSize: 14, textDecoration: 'none', fontWeight: 600 }}>
+            <Link href="/careers/status" style={{ color: '#082138', fontSize: 14, textDecoration: 'none', fontWeight: 600 }}>
               Track Status
             </Link>
           </div>
@@ -46,13 +46,13 @@ export default async function ApplyPage({ searchParams }) {
       {/* Main Container */}
       <main style={{ maxWidth: 840, margin: '40px auto 0', padding: '0 24px' }}>
         <div style={{ marginBottom: 32, textAlign: 'center' }}>
-          <div style={{ display: 'inline-block', background: 'rgba(212,175,55,0.1)', color: '#D4AF37', padding: '4px 12px', borderRadius: 999, fontSize: 12, fontWeight: 700, marginBottom: 12 }}>
+          <div style={{ display: 'inline-block', background: '#F3EBDC', color: '#7A6234', padding: '4px 12px', borderRadius: 999, fontSize: 12, fontWeight: 700, marginBottom: 12 }}>
             STEP 1 OF 2
           </div>
-          <h1 style={{ fontSize: 32, fontWeight: 800, color: '#fff', margin: '0 0 10px' }}>
+          <h1 style={{ fontSize: 32, fontWeight: 800, color: '#082138', margin: '0 0 10px' }}>
             Sales Agency Partner Application
           </h1>
-          <p style={{ color: '#94a3b8', fontSize: 15, maxWidth: 600, margin: '0 auto' }}>
+          <p style={{ color: '#6B7684', fontSize: 15, maxWidth: 600, margin: '0 auto' }}>
             Complete your profile and text CV below. Once submitted, you will immediately take the online evaluation assessment.
           </p>
         </div>

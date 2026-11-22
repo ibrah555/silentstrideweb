@@ -59,30 +59,30 @@ export default async function RecruitmentPage() {
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="kpi-grid" style={{ marginBottom: 24 }}>
-        <div className="card">
-          <div className="card-lbl">Total Applicants</div>
-          <div className="card-val">{totalApps}</div>
-          <div className="card-sub">All registered submissions</div>
+      {/* KPI Cards matching system theme */}
+      <div className="kpis" style={{ gridTemplateColumns: 'repeat(4, 1fr)', marginBottom: 20 }}>
+        <div className="kpi" style={{ borderLeft: '4px solid var(--navy)' }}>
+          <div className="l">Total Applicants</div>
+          <div className="v">{totalApps}</div>
+          <div className="s">All registered submissions</div>
         </div>
 
-        <div className="card">
-          <div className="card-lbl">Tests Completed</div>
-          <div className="card-val" style={{ color: '#38bdf8' }}>{assessedApps}</div>
-          <div className="card-sub">Finished online evaluation</div>
+        <div className="kpi" style={{ borderLeft: '4px solid #0284c7' }}>
+          <div className="l">Tests Completed</div>
+          <div className="v" style={{ color: '#0369a1' }}>{assessedApps}</div>
+          <div className="s">Finished online evaluation</div>
         </div>
 
-        <div className="card">
-          <div className="card-lbl">Top Scorers (≥70%)</div>
-          <div className="card-val" style={{ color: '#D4AF37' }}>{highScorers}</div>
-          <div className="card-sub">High commercial & ethics aptitude</div>
+        <div className="kpi" style={{ borderLeft: '4px solid var(--gold)' }}>
+          <div className="l">Top Scorers (≥70%)</div>
+          <div className="v" style={{ color: '#7A6234' }}>{highScorers}</div>
+          <div className="s">High commercial & ethics aptitude</div>
         </div>
 
-        <div className="card">
-          <div className="card-lbl">Onboarded / Hired</div>
-          <div className="card-val" style={{ color: 'var(--positive)' }}>{hiredCount}</div>
-          <div className="card-sub">Contracts issued & active</div>
+        <div className="kpi" style={{ borderLeft: '4px solid var(--positive)' }}>
+          <div className="l">Onboarded / Hired</div>
+          <div className="v" style={{ color: 'var(--positive)' }}>{hiredCount}</div>
+          <div className="s">Contracts issued & active</div>
         </div>
       </div>
 
