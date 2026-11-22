@@ -34,7 +34,7 @@ export default function RecruitmentDashboard({
   const [savingJob, setSavingJob] = useState(false);
   const [jobFormErr, setJobFormErr] = useState(null);
 
-  const baseUrl = origin || 'https://silentstrideweb.vercel.app';
+  const baseUrl = origin || 'https://silentstride.co.ke';
   const publicApplyUrl = `${baseUrl}/careers/apply`;
 
   // Filter applications
