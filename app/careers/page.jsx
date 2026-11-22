@@ -11,13 +11,26 @@ export default async function CareersPage() {
     process.env.SUPABASE_SERVICE_ROLE_KEY
   );
 
-  const [{ data: entities }, { data: jobs }] = await Promise.all([
-    admin.from('entities').select('id, name, code, kind, commission_rate').eq('status', 'active').order('name'),
-    admin.from('job_openings').select('*, entities(id, code, name)').order('created_at', { ascending: false })
-  ]);
+  let entities = [];
+  let jobOpenings = [];
+
+  try {
+    const [{ data: entData }, { data: jobsData }] = await Promise.all([
+      admin.from('entities').select('id, name, code, kind, commission_rate').eq('status', 'active').order('name'),
+      admin.from('job_openings').select('*, entities(id, code, name)').order('created_at', { ascending: false })
+    ]);
+    if (entData) entities = entData;
+    if (jobsData) jobOpenings = jobsData;
+  } catch (err) {
+    console.error('Error fetching careers data:', err);
+  }
 
   const subsidiaries = (entities || []).filter(e => e.kind === 'subsidiary');
-  const jobOpenings = jobs || [];
+
+  // Default active recruitment deadline (14-day cycle) for initial adverts
+  const now = new Date();
+  const defaultDeadline = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 12, 23, 59, 59).toISOString();
+  const defaultDeadlineStr = new Date(defaultDeadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', color: '#1A2430', fontFamily: 'ui-sans-serif, system-ui, -apple-system, sans-serif' }}>
@@ -43,17 +56,25 @@ export default async function CareersPage() {
       </header>
 
       {/* Hero Section */}
-      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '64px 24px 48px', textAlign: 'center' }}>
-        <div style={{ display: 'inline-block', background: '#F3EBDC', border: '1px solid #E4E1D8', color: '#7A6234', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, letterSpacing: '0.06em', marginBottom: 20 }}>
+      <section style={{ maxWidth: 1100, margin: '0 auto', padding: '56px 24px 40px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-block', background: '#F3EBDC', border: '1px solid #E4E1D8', color: '#7A6234', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, letterSpacing: '0.06em', marginBottom: 16 }}>
           OFFICIAL E-RECRUITMENT PORTAL
         </div>
-        <h1 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, lineHeight: 1.15, marginBottom: 20, color: '#082138' }}>
+        <h1 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, lineHeight: 1.15, marginBottom: 16, color: '#082138' }}>
           Build Your Career as an Authorized <br />
           <span style={{ color: '#AE8E4D' }}>Sales Agency Partner</span>
         </h1>
-        <p style={{ maxWidth: 680, margin: '0 auto 36px', fontSize: 17, color: '#6B7684', lineHeight: 1.6 }}>
+        <p style={{ maxWidth: 680, margin: '0 auto 28px', fontSize: 17, color: '#6B7684', lineHeight: 1.6 }}>
           Join Kenya&apos;s fastest-growing distribution and commercial network. Enjoy competitive commission structures, formal legal contracts, automated digital portal payouts, and designated territory rights.
         </p>
+
+        {/* Live Recruitment Window Countdown Banner */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, background: '#F7F6F2', border: '1px solid #E4E1D8', borderRadius: 12, padding: '10px 20px', marginBottom: 28 }}>
+          <span style={{ fontSize: 13, color: '#082138', fontWeight: 700 }}>
+            🔥 Active Recruitment Drive:
+          </span>
+          <CountdownTimer closesAt={jobOpenings[0]?.closes_at || defaultDeadline} status="open" />
+        </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: 16, flexWrap: 'wrap' }}>
           <Link href="/careers/apply" style={{ background: '#082138', color: '#FFFFFF', padding: '14px 32px', borderRadius: 8, fontWeight: 700, fontSize: 15, textDecoration: 'none', boxShadow: '0 4px 12px rgba(8,33,56,0.15)' }}>
@@ -111,8 +132,8 @@ export default async function CareersPage() {
       <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 80px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
           <div>
-            <h2 style={{ fontSize: 24, fontWeight: 700, color: '#082138', margin: 0 }}>Current Job Openings & Application Windows</h2>
-            <p style={{ color: '#6B7684', fontSize: 14, marginTop: 4 }}>Apply before the countdown timer expires for your designated territory</p>
+            <h2 style={{ fontSize: 24, fontWeight: 700, color: '#082138', margin: 0 }}>Open Positions & Live Countdown Deadlines</h2>
+            <p style={{ color: '#6B7684', fontSize: 14, marginTop: 4 }}>Apply before the application timer closes for your preferred territory</p>
           </div>
           <Link href="/careers/apply" style={{ color: '#AE8E4D', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
             General Application ➔
@@ -182,7 +203,7 @@ export default async function CareersPage() {
             })
           ) : subsidiaries.length > 0 ? (
             subsidiaries.map(sub => (
-              <div key={sub.id} style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div key={sub.id} style={{ background: '#FFFFFF', border: '1px solid #E4E1D8', borderRadius: 12, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
                     <div>
@@ -193,17 +214,35 @@ export default async function CareersPage() {
                       HIRING
                     </span>
                   </div>
+
+                  {/* Countdown Timer Badge for Initial Subsidiary Advert */}
+                  <div style={{ marginBottom: 16 }}>
+                    <CountdownTimer closesAt={defaultDeadline} status="open" />
+                  </div>
+
                   <p style={{ fontSize: 13, color: '#6B7684', lineHeight: 1.5, marginBottom: 16 }}>
-                    Commercial Agency Representative. Responsible for client acquisition, retail outlet management, and product distribution within the territory.
+                    Authorized Commercial Sales Agency Partner. Responsible for client acquisition, retail outlet management, and product distribution within the territory.
                   </p>
-                  <div style={{ fontSize: 13, color: '#1A2430', marginBottom: 20, display: 'flex', gap: 16 }}>
-                    <div>Role: <b>Sales Agent</b></div>
-                    <div>Target Rate: <b>{Math.round((sub.commission_rate || 0.1) * 100)}%</b></div>
+
+                  <div style={{ background: '#F7F6F2', border: '1px solid #E4E1D8', borderRadius: 8, padding: '10px 14px', fontSize: 12, color: '#1A2430', marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#6B7684' }}>Commission Rate:</span>
+                      <b>{Math.round((sub.commission_rate || 0.1) * 100)}%</b>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#6B7684' }}>Open Slots:</span>
+                      <b>5 Positions</b>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#6B7684' }}>Cycle Deadline:</span>
+                      <b style={{ color: '#082138' }}>{defaultDeadlineStr}</b>
+                    </div>
                   </div>
                 </div>
+
                 <Link
                   href={`/careers/apply?subsidiary=${sub.id}`}
-                  style={{ display: 'block', textAlign: 'center', background: '#F3EBDC', border: '1px solid #E4E1D8', color: '#7A6234', padding: '10px 16px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none' }}
+                  style={{ display: 'block', textAlign: 'center', background: '#082138', color: '#FFFFFF', padding: '11px 16px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxShadow: '0 2px 8px rgba(8,33,56,0.1)' }}
                 >
                   Apply for this Territory ➔
                 </Link>
@@ -213,6 +252,9 @@ export default async function CareersPage() {
             <div style={{ gridColumn: '1 / -1', background: '#F7F6F2', border: '1px solid #E4E1D8', borderRadius: 12, padding: 32, textAlign: 'center' }}>
               <h3 style={{ fontSize: 18, color: '#082138', margin: 0 }}>General Sales Agency Positions Open</h3>
               <p style={{ color: '#6B7684', fontSize: 14, margin: '8px 0 20px' }}>Apply to represent Silent Strides Network across Kenya.</p>
+              <div style={{ marginBottom: 20 }}>
+                <CountdownTimer closesAt={defaultDeadline} status="open" />
+              </div>
               <Link href="/careers/apply" style={{ background: '#082138', color: '#FFFFFF', padding: '10px 24px', borderRadius: 8, fontWeight: 700, textDecoration: 'none' }}>
                 Apply Now
               </Link>
