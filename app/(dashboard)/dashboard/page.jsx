@@ -7,11 +7,14 @@ export const dynamic = 'force-dynamic';
 export default async function Dashboard() {
   const supabase = createClient();
 
-  const [{ data: pnl }, { data: ledger }, { data: agents }] = await Promise.all([
+  const [{ data: pnl }, { data: ledger }, { data: agents }, { data: contributions }] = await Promise.all([
     supabase.from('v_subsidiary_pnl').select('*'),
     supabase.from('ledger_entries').select('*, entities(code)').order('entry_date', { ascending: false }).limit(8),
     supabase.from('v_agent_balances').select('*'),
+    supabase.from('capital_contributions').select('amount'),
   ]);
+
+  const totalCapital = (contributions || []).reduce((a, c) => a + Number(c.amount || 0), 0);
 
   const group = (pnl || []).reduce((a, s) => ({
     revenue: a.revenue + Number(s.revenue),
@@ -22,7 +25,9 @@ export default async function Dashboard() {
   const payable = (agents || []).reduce((a, x) => a + Number(x.payable), 0);
   const { data: cashRows } = await supabase.from('ledger_entries').select('debit, credit, account');
   const cash = (cashRows || []).filter(r => r.account === 'cash').reduce((a, r) => a + Number(r.debit) - Number(r.credit), 0);
-  const networth = cash + group.net;
+
+  // Accounting Equity (Net Worth) = Paid-In Capital + Retained Earnings (Cumulative Net Profit)
+  const networth = totalCapital + group.net;
 
   const maxNW = Math.max(...(pnl || []).map(s => Math.abs(Number(s.net_profit))), 1);
 
@@ -38,7 +43,7 @@ export default async function Dashboard() {
 
       <div className="kpis">
         <div className="kpi"><div className="l">Group net worth</div><div className="v">{fmt(networth)}</div>
-          <div className="s">Cash + retained earnings</div></div>
+          <div className="s">Capital + retained earnings</div></div>
         <div className="kpi"><div className="l">Cash on hand</div><div className="v">{fmt(cash)}</div>
           <div className="s">All entity accounts</div></div>
         <div className="kpi"><div className="l">Revenue (all time)</div><div className="v">{fmt(group.revenue)}</div>
