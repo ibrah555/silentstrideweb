@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
-// POST /api/inventory — action=add_item | action=stock_in | action=adjust
+// POST /api/inventory — action=add_item | action=edit_item | action=delete_item | action=stock_in | action=adjust
 export async function POST(request) {
   const form = await request.formData();
   const action = form.get('action');
@@ -21,6 +21,31 @@ export async function POST(request) {
     });
     if (error) return NextResponse.redirect(new URL('/inventory?error=' + encodeURIComponent(error.message), request.url));
     return NextResponse.redirect(new URL('/inventory?ok=item_added', request.url));
+  }
+
+  if (action === 'edit_item') {
+    const id = form.get('id');
+    if (!id) return NextResponse.redirect(new URL('/inventory?error=missing_id', request.url));
+
+    const { error } = await supabase.from('inventory_items').update({
+      entity_id: form.get('entity_id'),
+      sku: form.get('sku'),
+      name: form.get('name'),
+      unit_cost: Number(form.get('unit_cost')),
+      unit_price: Number(form.get('unit_price')),
+    }).eq('id', id);
+
+    if (error) return NextResponse.redirect(new URL('/inventory?error=' + encodeURIComponent(error.message), request.url));
+    return NextResponse.redirect(new URL('/inventory?ok=item_updated', request.url));
+  }
+
+  if (action === 'delete_item') {
+    const id = form.get('id');
+    if (!id) return NextResponse.redirect(new URL('/inventory?error=missing_id', request.url));
+
+    const { error } = await supabase.from('inventory_items').delete().eq('id', id);
+    if (error) return NextResponse.redirect(new URL('/inventory?error=' + encodeURIComponent(error.message), request.url));
+    return NextResponse.redirect(new URL('/inventory?ok=item_deleted', request.url));
   }
 
   if (action === 'stock_in') {
